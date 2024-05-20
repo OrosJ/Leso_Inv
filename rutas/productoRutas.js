@@ -139,7 +139,7 @@ rutas.get('/productosPorMes/:Mes', async (req, res) => {
         return res.status(400).json({ mensaje: "mes invalido" });
     }
 
-    const mesConsulta = meses.indexOf(nombreMesConsulta) + 1; // Obtener el número del mes
+    const mesConsulta = meses.indexOf(nombreMesConsulta) + 1; 
 
     try {
         const productosPorMes = await productoModel.find().lean(); // Obtener todos los productos
