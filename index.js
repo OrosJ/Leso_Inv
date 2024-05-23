@@ -8,6 +8,7 @@ require('dotenv').config();
 const app = express();
 //ruta
 const productoRutas = require('./rutas/productoRutas');
+const salidasRutas = require('./rutas/salidasRutas');
 //conifg enviornment
 const PORT = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI;
@@ -36,6 +37,7 @@ const autenticar = async (req, res, next) =>{
 
 app.use('/auth', authRutas);
 app.use('/productos', autenticar, productoRutas);
+app.use('/salidas', autenticar, salidasRutas);
 
 //utilizar las rutas
 //app.use('/productos', productoRutas);

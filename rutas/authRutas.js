@@ -26,10 +26,21 @@ rutas.post('/iniciarsesion', async (req, res) => {
         if  (!validarContrasenia)
             return res.status(401).json({error: 'Contrasenia Invalida'});
         //Creacion de token
-        const token = jwt.sign({usuarioId: usuario._id}, 'clave_secreta', {expiresIn: '1h'});
+        const token = jwt.sign({usuarioId: usuario._id}, 'clave_secreta', {expiresIn: '5h'});
         res.json({token});
     } catch (error) {
         res.status(500).json({mensaje: error.message});
     }
 });
+
+//CerrarSesion
+rutas.post('/cerrarSesion', async (req, res) => {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+        return res.status(401).json({ error: 'Token no proporcionado' });
+    }
+    Usuario.cerrarSesion(token);
+    res.status(200).json({ mensaje: 'Sesión cerrada exitosamente' });
+});
+
 module.exports = rutas;

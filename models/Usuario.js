@@ -15,7 +15,8 @@ const usuarioSchema = new mongoose.Schema({
         type: String,
         required :true,
         unique : true
-    }
+    },
+    tokensInvalidos: [String]
 });
 
 
@@ -28,10 +29,21 @@ usuarioSchema.pre('save', async function (next){
     next();
 });
 
+//Cerrar Sesion
+usuarioSchema.statics.cerrarSesion = async function(token) {
+    try {
+        // Agregar el token a la lista de tokens inválidos
+        await this.findOneAndUpdate({ tokensInvalidos: { $ne: token } }, { $push: { tokensInvalidos: token } });
+    } catch (error) {
+        console.error("Error al cerrar sesión:", error);
+    }
+};
+
 //comparar contrasenia
 usuarioSchema.methods.CompararContrasenia = async function (contraseniaComparar){
     return await bcrypt.compare(contraseniaComparar, this.contrasenia);
 };
+
 
 const UsuarioModel = mongoose.model('Usuario',usuarioSchema, 'usuario');
 module.exports = UsuarioModel;
